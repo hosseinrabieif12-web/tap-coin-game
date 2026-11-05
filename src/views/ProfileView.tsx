@@ -16,6 +16,8 @@ import {
   HelpCircle,
   X,
   Github,
+  Send,
+  Radio,
 } from 'lucide-react';
 import { GameState } from '../types/game';
 import { formatCompact, getPlayerRank } from '../utils/gameMath';
@@ -28,6 +30,7 @@ interface ProfileViewProps {
   onResetGame: () => void;
   onChangeName: (newName: string) => void;
   onOpenGitHubModal: () => void;
+  onOpenTelegramModal: () => void;
 }
 
 export const ProfileView: React.FC<ProfileViewProps> = ({
@@ -37,6 +40,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   onResetGame,
   onChangeName,
   onOpenGitHubModal,
+  onOpenTelegramModal,
 }) => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(state.player.name);
@@ -271,6 +275,34 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         >
           <Github className="w-4 h-4" />
           <span>انتشار روی گیت‌هاب با توکن (Publish to GitHub)</span>
+        </button>
+      </div>
+
+      {/* Telegram Bot & Webhook Card */}
+      <div className="p-4 rounded-2xl bg-gradient-to-br from-sky-500/15 via-[#0F141E] to-[#0A0D14] border border-sky-500/40 shadow-lg relative overflow-hidden">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-sky-400/40 flex items-center justify-center text-sky-400 shrink-0 mt-0.5">
+              <Send className="w-5 h-5 -translate-x-0.5 translate-y-0.5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-black text-slate-100 flex items-center gap-1.5">
+                <span>اتصال به بات تلگرام و وب‌هوک</span>
+                <span className="text-[9px] bg-sky-500 text-white font-black px-1.5 py-0.2 rounded uppercase">Bot</span>
+              </h4>
+              <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                تنظیم خودکار دکمه اجرای بازی (Mini App) و وب‌هوک با توکن بات تلگرام
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <button
+          onClick={onOpenTelegramModal}
+          className="mt-3.5 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-black text-xs uppercase tracking-wide flex items-center justify-center gap-2 shadow-md shadow-sky-500/20 active:scale-98 transition-all cursor-pointer"
+        >
+          <Send className="w-4 h-4" />
+          <span>اتصال خودکار به بات تلگرام (Telegram Bot Setup)</span>
         </button>
       </div>
 

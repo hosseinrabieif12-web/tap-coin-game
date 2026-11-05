@@ -186,6 +186,17 @@ class SoundEngine {
 
   public triggerHaptic(durationMs: number = 18) {
     if (!this.hapticEnabled) return;
+
+    // Try Telegram native haptic first if inside Telegram Mini App
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
+      try {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred(durationMs > 25 ? 'medium' : 'light');
+        return;
+      } catch {
+        // Fallback
+      }
+    }
+
     if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
       try {
         navigator.vibrate(durationMs);

@@ -11,6 +11,7 @@ import { ParticleCanvas, triggerParticleBurst } from './components/ParticleCanva
 import { FloatingNumbers } from './components/FloatingNumbers';
 import { OfflineModal } from './components/OfflineModal';
 import { GitHubPublishModal } from './components/GitHubPublishModal';
+import { TelegramBotModal } from './components/TelegramBotModal';
 import { HomeView } from './views/HomeView';
 import { UpgradeView } from './views/UpgradeView';
 import { MissionsView } from './views/MissionsView';
@@ -27,6 +28,7 @@ import {
 } from './utils/gameMath';
 import { DAILY_REWARDS_TABLE, DEFAULT_INITIAL_STATE, getTodayDateKey } from './utils/constants';
 import { soundManager } from './utils/audio';
+import { initTelegramWebApp, getTelegramUser } from './utils/telegramWebApp';
 import tapBannerImg from './assets/images/tap_coin_banner_1793884055895.jpg';
 
 export default function App() {
@@ -39,16 +41,31 @@ export default function App() {
   const [offlineSummary, setOfflineSummary] = useState<OfflineSummary | null>(null);
   const [floatingNumbers, setFloatingNumbers] = useState<FloatingNumber[]>([]);
   const [isGitHubModalOpen, setIsGitHubModalOpen] = useState<boolean>(false);
+  const [isTelegramModalOpen, setIsTelegramModalOpen] = useState<boolean>(false);
 
   // Keep a ref to latest state to avoid stale closures in interval ticks and unmount saves
   const stateRef = useRef<GameState>(gameState);
   stateRef.current = gameState;
 
-  // Initialize sounds and check offline progress on mount
+  // Initialize sounds, check offline progress, and detect Telegram WebApp on mount
   useEffect(() => {
+    initTelegramWebApp();
+
     const { state, isFirstTime } = loadGameState();
     soundManager.setSoundEnabled(state.settings.soundEnabled);
     soundManager.setHapticEnabled(state.settings.hapticEnabled);
+
+    // Sync Telegram user profile if running inside Telegram
+    const tgUser = getTelegramUser();
+    if (tgUser?.first_name) {
+      setGameState((prev) => ({
+        ...prev,
+        player: {
+          ...prev.player,
+          name: tgUser.first_name,
+        },
+      }));
+    }
 
     if (!isFirstTime && state.lastSaved) {
       const summary = calculateOfflineProgress(
@@ -428,6 +445,12 @@ export default function App() {
         onClose={() => setIsGitHubModalOpen(false)}
       />
 
+      {/* Telegram Bot & Webhook Modal */}
+      <TelegramBotModal
+        isOpen={isTelegramModalOpen}
+        onClose={() => setIsTelegramModalOpen(false)}
+      />
+
       {/* Sticky Header */}
       <Header
         coins={gameState.coins}
@@ -435,6 +458,7 @@ export default function App() {
         soundEnabled={gameState.settings.soundEnabled}
         onToggleSound={handleToggleSound}
         onOpenGitHubModal={() => setIsGitHubModalOpen(true)}
+        onOpenTelegramModal={() => setIsTelegramModalOpen(true)}
         playerTitle={rank.title}
         playerLevel={rank.level}
         playerBadge={rank.badge}
@@ -471,6 +495,7 @@ export default function App() {
             onResetGame={handleResetGame}
             onChangeName={handleChangeName}
             onOpenGitHubModal={() => setIsGitHubModalOpen(true)}
+            onOpenTelegramModal={() => setIsTelegramModalOpen(true)}
           />
         )}
       </main>

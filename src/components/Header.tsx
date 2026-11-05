@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Zap, Github } from 'lucide-react';
+import { Volume2, VolumeX, Zap, Github, Send } from 'lucide-react';
 import { formatCompact } from '../utils/gameMath';
 
 interface HeaderProps {
@@ -8,6 +8,7 @@ interface HeaderProps {
   soundEnabled: boolean;
   onToggleSound: () => void;
   onOpenGitHubModal: () => void;
+  onOpenTelegramModal: () => void;
   playerTitle: string;
   playerLevel: number;
   playerBadge: string;
@@ -19,6 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   soundEnabled,
   onToggleSound,
   onOpenGitHubModal,
+  onOpenTelegramModal,
   playerTitle,
   playerLevel,
   playerBadge,
@@ -46,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Live Passive Income, GitHub Publish & Sound Toggle */}
+        {/* Live Passive Income, Telegram, GitHub & Sound */}
         <div className="flex items-center gap-1.5 shrink-0">
           {coinsPerSecond > 0 && (
             <div className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-950/40 border border-amber-500/20 text-amber-300 text-xs font-semibold tabular-nums">
@@ -55,20 +57,31 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           )}
 
+          {/* Telegram Bot Connector Button */}
+          <button
+            onClick={onOpenTelegramModal}
+            title="اتصال به بات تلگرام و وب‌هوک (Telegram Bot)"
+            className="flex items-center gap-1 py-1.5 px-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 hover:border-sky-400 text-sky-400 text-xs font-bold transition-all active:scale-95 cursor-pointer"
+          >
+            <Send className="w-3.5 h-3.5 -translate-x-0.5 translate-y-0.5" />
+            <span className="hidden xs:inline text-[11px]">بات</span>
+          </button>
+
           {/* GitHub Publish Button */}
           <button
             onClick={onOpenGitHubModal}
             title="انتشار خودکار روی گیت‌هاب (Publish to GitHub)"
-            className="flex items-center gap-1.5 py-1.5 px-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-400 text-amber-300 text-xs font-bold transition-all active:scale-95"
+            className="flex items-center gap-1 py-1.5 px-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-400 text-amber-300 text-xs font-bold transition-all active:scale-95 cursor-pointer"
           >
-            <Github className="w-4 h-4 text-amber-400" />
-            <span className="hidden xs:inline text-[11px]">انتشار</span>
+            <Github className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden xs:inline text-[11px]">گیت‌هاب</span>
           </button>
 
+          {/* Sound Toggle */}
           <button
             onClick={onToggleSound}
             aria-label={soundEnabled ? 'Mute sound effects' : 'Unmute sound effects'}
-            className="w-9 h-9 rounded-lg bg-slate-900/90 border border-slate-800 hover:border-amber-500/40 text-slate-300 hover:text-amber-400 flex items-center justify-center transition-colors active:scale-95"
+            className="w-8 h-8 rounded-lg bg-slate-900/90 border border-slate-800 hover:border-amber-500/40 text-slate-300 hover:text-amber-400 flex items-center justify-center transition-colors active:scale-95 cursor-pointer"
           >
             {soundEnabled ? (
               <Volume2 className="w-4 h-4 text-amber-400" />
