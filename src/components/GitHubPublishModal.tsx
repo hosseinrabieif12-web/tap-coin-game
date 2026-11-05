@@ -90,7 +90,11 @@ export const GitHubPublishModal: React.FC<GitHubPublishModalProps> = ({ isOpen, 
       setPublishResult(result);
       triggerParticleBurst(window.innerWidth / 2, window.innerHeight / 2, 60, 'celebration');
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'خطایی در انتشار به گیت‌هاب رخ داد.';
+      console.error('GitHub Publish Error:', err);
+      let message = err instanceof Error ? err.message : 'خطایی در انتشار به گیت‌هاب رخ داد.';
+      if (message.includes('Bad credentials') || message.includes('401')) {
+        message = 'توکن گیت‌هاب نامعتبر یا منقضی است. لطفاً توکن جدید با دسترسی repo بسازید.';
+      }
       setError(message);
     } finally {
       setIsLoading(false);
