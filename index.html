@@ -19,7 +19,13 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   </head>
   <body class="bg-[#080B10] text-slate-100 antialiased select-none overflow-x-hidden font-sans">
-    <div id="root"></div>
+    <div id="root">
+      <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #080B10; color: #F59E0B; font-family: 'Plus Jakarta Sans', system-ui, sans-serif;">
+        <div style="width: 44px; height: 44px; border: 3px solid rgba(245, 158, 11, 0.2); border-top-color: #F59E0B; border-radius: 50%; animation: tapSpin 0.75s linear infinite;"></div>
+        <div style="margin-top: 16px; font-weight: 800; font-size: 14px; letter-spacing: 0.15em; color: #FBBF24;">TAP COIN</div>
+        <style>@keyframes tapSpin { to { transform: rotate(360deg); } }</style>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
